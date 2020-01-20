@@ -1,0 +1,382 @@
+/* 
+ * File:   employee.c
+ * Author: hassanali
+ * Purpose:
+ * Status: WORKING
+ *
+ * Created on January 8, 2020, 11:26 AM
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+const int MAX_NUM_MANAGER = 5;
+const int MAX_NUM_SECRETARY = 7;
+const int MAX_NUM_SALESPERSON = 15;
+
+// ----------------------------BEGIN STRUCT "NAME"------------------------------
+
+typedef struct {
+    
+    char firstName[30];
+    char lastName[30];
+    
+} Name;
+
+
+// Purpose:
+// Parameters:
+// Returns:
+// Side Effects: 
+
+void readName (Name* name, FILE* dataFile) {
+    
+    fscanf(dataFile, "%s", name->lastName);
+    fscanf(dataFile, "%s", name->firstName);
+    
+}
+
+
+// ----------------------------END STRUCT "NAME"--------------------------------
+
+// -----------------------BEGIN STRUCT "DATEOFBIRTH"----------------------------
+
+typedef struct {
+    
+   int day;
+   char month[10];
+   int year;
+    
+} DateOfBirth;
+
+
+// Purpose:
+// Parameters:
+// Returns:
+// Side Effects: 
+
+void readDOB(DateOfBirth* dateOfBirth, FILE* dataFile) {
+    
+    fscanf(dataFile, "%s", dateOfBirth->month);
+    fscanf(dataFile, "%d", &dateOfBirth->day);
+    fscanf(dataFile, "%d", &dateOfBirth->year);
+    
+}
+
+// -------------------------END STRUCT "DATEOFBIRTH"----------------------------
+
+// -------------------------BEGIN STRUCT "PAYINFO"------------------------------
+
+typedef struct {
+    
+    double hourlyPay;
+    double hoursWorked;
+    double hoursOvertime;
+    
+} PayInfo;
+
+
+// Purpose:
+// Parameters:
+// Returns:
+// Side Effects: 
+
+void readPayInfo(PayInfo* payInfo, FILE* dataFile) {
+    
+    fscanf(dataFile, "%lf", &payInfo->hourlyPay);
+    fscanf(dataFile, "%lf", &payInfo->hoursWorked);
+    
+    // if hoursworked is > 60, error
+    // if hourlyPay is over 100 and below 14, error
+    
+}
+
+
+// Purpose:
+// Parameters:
+// Returns:
+// Side Effects: 
+
+void calcHoursOvertime(PayInfo* payInfo, FILE* dataFile) {
+    
+    payInfo->hoursOvertime = 40 - payInfo->hoursWorked;
+    
+}
+
+
+// ---------------------------END STRUCT "PAYINFO"------------------------------
+
+// ------------------------BEGIN STRUCT "EMPLOYEEINFO"--------------------------
+
+//typedef struct {
+    
+//    char position[12];
+//    Name name;
+//    DateOfBirth birthday;
+//    PayInfo payInfo;
+//    char sin[10];
+    
+// } EmployeeInfo;
+
+
+// ------------------------END STRUCT "EMPLOYEEINFO"----------------------------
+
+// -------------------------BEGIN STRUCT "MANAGER"------------------------------
+
+typedef struct {
+    
+    char position[12];
+    char firstName[30];
+    char lastName[30];
+    char sin[10];
+    char month[10];
+    int day;
+    int year;
+    double hourlyPay;
+    double hoursWorked;
+    
+} Manager;
+
+
+
+// ---------------------------END STRUCT "MANAGER"------------------------------
+
+// -------------------------BEGIN STRUCT "SALESPERSON"--------------------------
+
+typedef struct {
+    
+    char position[12];
+    char firstName[30];
+    char lastName[30];
+    int day;
+    char month[10];
+    int year;
+    double hourlyPay;
+    double hoursWorked;
+    char sin[10];    
+    double sales;
+    double commission;
+    
+    //  commission = sales * 0.02;
+    
+    
+} Salesperson;
+
+
+// Purpose:
+// Parameters:
+// Returns:
+// Side Effects: 
+
+void readSales(Salesperson* salesperson, FILE* dataFile) {
+    
+    fscanf(dataFile, "%lf", &salesperson->sales);
+    
+}
+
+
+// Purpose:
+// Parameters:
+// Returns:
+// Side Effects: 
+
+void calcCommission(Salesperson* salesperson, FILE* dataFile) {
+    
+    salesperson->commission = salesperson->sales * 0.02;
+    
+}
+
+
+// -------------------------END STRUCT "SALESPERSON"----------------------------
+
+// -------------------------BEGIN STRUCT "SECRETARY"----------------------------
+
+typedef struct {
+    
+    char position[12];
+    char firstName[30];
+    char lastName[30];
+    int day;
+    char month[10];
+    int year;
+    double hourlyPay;
+    double hoursWorked;
+    char sin[10];
+    double overtimePay;
+    
+} Secretary;
+
+
+// Purpose:
+// Parameters:
+// Returns:
+// Side Effects: 
+
+double calcOvertimePay(Secretary *secretary, PayInfo* payInfo, FILE* dataFile) {
+    
+    secretary->overtimePay = payInfo->hoursOvertime * (payInfo->hourlyPay * 1.5);
+    
+    return secretary->overtimePay;
+    
+}
+
+// ---------------------------END STRUCT "SECRETARY"----------------------------
+
+// Purpose:
+// Parameters:
+// Returns:
+// Side Effects: 
+
+/* void readEmployeeInfo(FILE* dataFile, Manager managerArray[MAX_NUM_MANAGER], Secretary secretaryArray[MAX_NUM_SECRETARY], Salesperson salespersonArray[MAX_NUM_SALESPERSON]) {
+    
+    EmployeeInfo* employeeInfo;
+    Name* name;
+    DateOfBirth* dateOfBirth;
+    PayInfo* payInfo;
+    
+    
+    
+    while ((strcmp(employeeInfo->position, "END") != 0)) {
+        
+        
+        fscanf(dataFile, "%s", employeeInfo->position);
+        
+        if ((strcmp(employeeInfo->position, "manager") == 0)) {
+            
+            readName(name, dataFile);
+            
+            
+        }
+       
+        
+        readName(name, dataFile);
+        fscanf(dataFile, "%s", employeeInfo->sin);
+        readDOB(dateOfBirth, dataFile);
+        readPayInfo(payInfo, dataFile);
+        
+    }
+    
+}   
+
+*/
+// while (position != 'end') loop
+
+// temp variable
+
+
+void readManagerInfo(FILE* dataFile, Manager managerArray[MAX_NUM_MANAGER]) {   
+    
+    int iterator = 0;
+    
+    for (iterator = 0; iterator < MAX_NUM_MANAGER; iterator++) {
+    
+        fscanf(dataFile, "%s", managerArray[iterator].lastName);
+        fscanf(dataFile, "%s", managerArray[iterator].firstName);
+        fscanf(dataFile, "%s", managerArray[iterator].sin);
+        fscanf(dataFile, "%s", managerArray[iterator].month);
+        fscanf(dataFile, "%d", &managerArray[iterator].day);
+        fscanf(dataFile, "%d", &managerArray[iterator].year);
+        fscanf(dataFile, "%lf", &managerArray[iterator].hourlyPay);
+        fscanf(dataFile, "%lf", &managerArray[iterator].hoursWorked);
+    
+    }
+    
+}
+
+void readSecretaryInfo(FILE* dataFile, Secretary secretaryArray[MAX_NUM_SECRETARY]) {
+    
+    int iterator = 0;
+    
+    for (iterator = 0; iterator < MAX_NUM_SECRETARY; iterator++) {
+        
+        fscanf(dataFile, "%s", secretaryArray[iterator].lastName);
+        fscanf(dataFile, "%s", secretaryArray[iterator].firstName);
+        fscanf(dataFile, "%s", secretaryArray[iterator].sin);
+        fscanf(dataFile, "%s", secretaryArray[iterator].month);
+        fscanf(dataFile, "%d", &secretaryArray[iterator].day);
+        fscanf(dataFile, "%d", &secretaryArray[iterator].year);
+        fscanf(dataFile, "%lf", &secretaryArray[iterator].hourlyPay);
+        fscanf(dataFile, "%lf", &secretaryArray[iterator].hoursWorked); 
+    
+        secretaryArray[iterator].overtimePay = (secretaryArray[iterator].hoursWorked - 40.0) * (secretaryArray[iterator].hourlyPay * 1.5); 
+          
+    }
+    
+}
+
+void readSalespersonInfo(FILE* dataFile, Salesperson salespersonArray[MAX_NUM_SALESPERSON]) {
+    
+    int iterator = 0;
+    
+    for (iterator = 0; iterator < MAX_NUM_SALESPERSON; iterator++) {
+        
+        fscanf(dataFile, "%s", salespersonArray[iterator].lastName);
+        fscanf(dataFile, "%s", salespersonArray[iterator].firstName);
+        fscanf(dataFile, "%s", salespersonArray[iterator].sin);
+        fscanf(dataFile, "%s", salespersonArray[iterator].month);
+        fscanf(dataFile, "%d", &salespersonArray[iterator].day);
+        fscanf(dataFile, "%d", &salespersonArray[iterator].year);
+        fscanf(dataFile, "%lf", &salespersonArray[iterator].hourlyPay);
+        fscanf(dataFile, "%lf", &salespersonArray[iterator].hoursWorked);
+        fscanf(dataFile, "%lf", &salespersonArray[iterator].sales);
+        
+        salespersonArray[iterator].commission = salespersonArray[iterator].sales * 0.02;
+        
+    }
+    
+}
+
+int main(int argc, char** argv) {
+
+    Manager managerArray[MAX_NUM_MANAGER];
+    Secretary secretaryArray[MAX_NUM_SECRETARY][8];
+    Salesperson salespersonArray[MAX_NUM_SALESPERSON][9];
+    
+    FILE* dataFile;
+    char dataFileName[100];
+    
+    
+    printf("Welcome to the Employee Payroll Calculator!\n");
+    printf("Please enter the name of the file to read data from: ");
+    
+    scanf("%[^\n]s", dataFileName);
+    fgetc(stdin);
+    
+    dataFile = fopen(dataFileName, "r");
+    
+    while (dataFile == NULL) {
+        
+        printf("File does not exist. Please enter a file that exists: ");
+        scanf("%[^\n]s", dataFileName);
+        fgetc(stdin);
+        
+        dataFile = fopen(dataFileName, "r");    
+        
+    }
+   
+    readManagerInfo(dataFile, managerArray);
+    
+    fclose(dataFile);
+    
+    printf("\nPAY REPORTS\n");
+    int i = 0;
+    
+    //for (i = 0; i < 2; i++) {
+        
+        printf("\n%s\n", managerArray[0].lastName);
+        printf("%s\n", managerArray[0].firstName);
+        printf("%s\n", managerArray[0].sin);
+        printf("%s\n", managerArray[0].month);
+        printf("%d\n", managerArray[0].day);
+        printf("%d\n", managerArray[0].year);
+        printf("%d\n", managerArray[0].year);
+        printf("%lf\n", managerArray[0].hourlyPay);
+        printf("%lf\n", managerArray[0].hoursWorked);
+        
+    //}
+    
+    
+    return (EXIT_SUCCESS);
+}
+
